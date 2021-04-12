@@ -15,21 +15,22 @@ def main(argv):
     for root, dirs, files in os.walk(rootPath):
         # for filename in fnmatch.filter(files, '*.zip'):
         for filename in files:
-            file = os.path.join(root, filename)
-            if zipfile.is_zipfile( file ):
-                print("Extract ZIP:",os.path.join(root, filename))
+            filePath = os.path.join(root, filename)
+            os.rename( filePath, filePath.encode('utf-8') )
+
+            if zipfile.is_zipfile( filePath ):
+                print("Extract ZIP:",filePath)
                 try:
-                    # zipfile.ZipFile(os.path.join(root, filename)).extractall(os.path.join(root, os.path.splitext(filename)[0]))
-                    zipfile.ZipFile(os.path.join(root, filename)).extractall(root)
+                    zipfile.ZipFile(filePath).extractall(root)
                     print( "SUCCESS!" )
                 except Exception as e:
                     print(e)
                     _ = input( "FAIL...PRESS ANY KEY TO CONTINUE...")
 
-            if rarfile.is_rarfile( file ):
-                print("Extract RAR:",os.path.join(root, filename))
+            if rarfile.is_rarfile( filePath ):
+                print("Extract RAR:",filePath)
                 try:
-                    rarfile.RarFile( os.path.join( root, filename ) ).extractall( root )
+                    rarfile.RarFile( filePath ).extractall( root )
                     print( "SUCCESS!" )
                 except Exception as e:
                     print(e)
